@@ -1,5 +1,71 @@
-<html>
-    <body>
-        hello world
-    </body>
-</html>
+<!DOCTYPE html>
+<head>
+    <link rel="icon" href="data:,">
+<meta charset="utf-8">
+<style>
+    #chessboard {}
+</style>
+</head>
+<body>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <table border='1'>
+      <tr>
+        <td><div id='viewport'></div></td>
+        <td valign='top'>
+            <div id='deadPieces'>
+
+            </div>
+        </td>
+      </tr>
+    </table>
+    <hr/>
+    <div id='out'></div>
+    <hr/>
+    <script>
+    </script>
+    <div id='controls'>
+        <button onclick='toggleDebugState()'>toggleDebugState()</button>
+        <button onclick='toggleShowInfluence()'>toggleShowInfluence()</button>
+        <button onclick='toggleEnforceRules()'>toggleEnforceRules()</button>
+    </div>
+    <script> 
+    // 704 is cleanly divisible by 8...  8 rows and 8 columns... not too small and not too big
+    const width = 704;
+    const height = 704;
+    const size = width / 8 // Maybe ought to be called 'radius' 
+    document.getElementById("viewport").innerHTML = `<svg id='chessboard' width="${width}" height="${height}"></svg>`
+    const svg = d3.select("svg");
+    </script>
+
+    <script src="pieces5.js"></script>
+    <script src="logic5.js"></script>
+    
+    <script>
+    makeCells()
+    // Make the board ( needs to go first because the pieces get the actual XY from these cells )
+    for ( let key in cells ) {
+        const cell = cells[key]
+        addCellIntoDom(cell)
+    }
+    // Make and place the pieces
+    for ( let key in pieces ) { 
+        const piece = pieces[key]
+        addPieceIntoDom(piece)
+        const cellId = "id" + piece.col + "_" + piece.row
+        cells[cellId].setPieceOnThisCell(piece.id)
+    }
+
+ 
+/*
+    function myFunction() {
+  var table = document.getElementById("myTable");
+  var row = table.insertRow(0);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  cell1.innerHTML = "NEW CELL1";
+  cell2.innerHTML = "NEW CELL2";
+}
+*/
+    </script>
+</body>
+

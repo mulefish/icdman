@@ -158,7 +158,21 @@ function dragstarted(d) {
     const xy = getCellXY(piece.row, piece.col)
     piece.sx = xy.x // d3.event.x // needed for snap back ability
     piece.sy = xy.y // d3.event.y // needed for snap back ability
-    POSSIBLE = piece.get_possible_moves();
+
+    if ( ENFORCE_RULES === true ) {
+        POSSIBLE = piece.get_possible_moves();
+    } else {
+        // Ignore rules. Just populate the POSSIBLE assoc array with all the empty cells and set the value to the MOVE color
+        POSSIBLE = {} 
+        for ( let key in cells ) {
+            const cell = cells[key]
+            const pieceIndex = parseInt(cell.getWhoIsOnThisCell())
+            if ( isNaN(pieceIndex) === true)  {
+                POSSIBLE[key] = MOVE
+            }
+        }        
+
+    }
 
     const cellThatThisWasOn = "id" + piece.col + "_" + piece.row 
     cells[cellThatThisWasOn].setPieceOnThisCell(NONE)

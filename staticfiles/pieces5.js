@@ -1,16 +1,18 @@
 let DEBUG = false; 
 let SHOW_INFLUENCE = true;
+let ENFORCE_RULES = true;
 let cells = {}
 const ATTACK = "#ff0000"
 const MOVE = "#ffff00"
 const SUPPORT = "#0000ff"
 const NONE=""
 
-
+function toggleEnforceRules() {
+  ENFORCE_RULES = ! ENFORCE_RULES;
+}
 function toggleShowInfluence() { 
     SHOW_INFLUENCE =  ! SHOW_INFLUENCE;
 }
-
 
 function toggleDebugState() {
     DEBUG =  ! DEBUG;
