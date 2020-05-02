@@ -29,12 +29,12 @@ function toggleDebugState() {
 }
 
 class Cell {
-    constructor(id, size, mainClr, subClr, x, y, w, h, row, col, number, letter, ax, ay) {
+    constructor(id, size, mainClr, subClr, smokey, x, y, w, h, row, col, number, letter, ax, ay) {
         this.id = id;
         this.size = size;
         this.mainClr = mainClr;
         this.subClr = subClr;
-        
+        this.smokey = smokey;
         this.x = x;
         this.y = y;
         this.w = w;
@@ -68,21 +68,20 @@ class Cell {
     }
 
     resetBG() {
-      d3.select("#" + this.id).attr('fill-opacity', 1.0)
-      d3.select("#" + this.id).attr('fill', this.mainClr)
-      d3.select("#" + this.id).attr('stroke-width', 0)
+//      d3.select("#" + this.id).attr('fill-opacity', 1.0)
+//      d3.select("#" + this.id).attr('stroke-width', 0)
+d3.select("#" + this.id).attr('fill', this.mainClr)
 
     }
     showPossible(colorToChangeTo) { 
         if ( SHOW_INFLUENCE === true ) {
 
           if ( colorToChangeTo === MOVE ) {
-            d3.select("#" + this.id).attr('fill-opacity', 1.0)
-            d3.select("#" + this.id).attr('fill', "#ff6633")
-            d3.select("#" + this.id).attr('stroke', "#000000")
-            d3.select("#" + this.id).attr('stroke-width', 2)
-    
-  
+            // d3.select("#" + this.id).attr('fill-opacity', 1.0)
+            // d3.select("#" + this.id).attr('fill', "#ff6633")
+            // d3.select("#" + this.id).attr('stroke', "#000000")
+            // d3.select("#" + this.id).attr('stroke-width', 2)
+            d3.select("#" + this.id).attr('fill', this.smokey)
           } else {
             d3.select("#" + this.id).attr('fill', colorToChangeTo)
           }
@@ -161,14 +160,17 @@ function makeCells() {
             const id = col + "_" + row
             let mainClr;
             let subClr;
+            let smokey;
             if (colorId % 2 == 0) {
                 mainClr = LIGHT_CELL
                 subClr = DARK_CELL
+                smokey = "#0D3E10"
             } else {
                 mainClr = DARK_CELL
                 subClr = LIGHT_CELL
+                smokey = "#808080"
             }
-            let cell = new Cell("id" + id,size, mainClr,subClr,myX,myY,size,size,row,col,numbers[row],letters[col],myX + (size / 2),myY + (size / 2))
+            let cell = new Cell("id" + id,size, mainClr,subClr,smokey, myX,myY,size,size,row,col,numbers[row],letters[col],myX + (size / 2),myY + (size / 2))
             colorId++
             myX += size
             cells[cell.id] = cell
