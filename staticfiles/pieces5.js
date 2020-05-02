@@ -14,6 +14,7 @@ function toggleShowInfluence() {
     SHOW_INFLUENCE =  ! SHOW_INFLUENCE;
 }
 
+
 function toggleDebugState() {
     DEBUG =  ! DEBUG;
     if ( DEBUG === true ) {
@@ -33,6 +34,7 @@ class Cell {
         this.size = size;
         this.mainClr = mainClr;
         this.subClr = subClr;
+        
         this.x = x;
         this.y = y;
         this.w = w;
@@ -60,20 +62,30 @@ class Cell {
         // console.log('killPiece in ' + incomingPieceId + " out " + this.whoIsOnThisCell)
         let html =         document.getElementById("deadPieces").innerHTML
         html += pieces[this.whoIsOnThisCell].unicode + "<br/>"
-
         document.getElementById("deadPieces").innerHTML = html
-
-
         d3.select("#P" + this.whoIsOnThisCell).remove();
         this.setPieceOnThisCell(incomingPieceId)
     }
 
     resetBG() {
+      d3.select("#" + this.id).attr('fill-opacity', 1.0)
       d3.select("#" + this.id).attr('fill', this.mainClr)
+      d3.select("#" + this.id).attr('stroke-width', 0)
+
     }
     showPossible(colorToChangeTo) { 
         if ( SHOW_INFLUENCE === true ) {
-      d3.select("#" + this.id).attr('fill', colorToChangeTo)
+
+          if ( colorToChangeTo === MOVE ) {
+            d3.select("#" + this.id).attr('fill-opacity', 1.0)
+            d3.select("#" + this.id).attr('fill', "#ff6633")
+            d3.select("#" + this.id).attr('stroke', "#000000")
+            d3.select("#" + this.id).attr('stroke-width', 2)
+    
+  
+          } else {
+            d3.select("#" + this.id).attr('fill', colorToChangeTo)
+          }
         }
     }
     getAncoreXY() { 

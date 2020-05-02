@@ -7,11 +7,11 @@ function addCellIntoDom(cell) {
         .append('svg:g')
         .attr('transform', 'translate(' + cell.x + ',' + cell.y + ')')
 
+
     let background = c.append('svg:rect')
         .attr('id', cell.id)
         .attr('fill', cell.mainClr)
         .attr('fill-opacity', 1.0)
-        .attr('stroke-width', 4)
         .attr('width', cell.size)
         .attr('height', cell.size)
 
@@ -171,7 +171,6 @@ function dragstarted(d) {
                 POSSIBLE[key] = MOVE
             }
         }        
-
     }
 
     const cellThatThisWasOn = "id" + piece.col + "_" + piece.row 
@@ -179,7 +178,6 @@ function dragstarted(d) {
 
     for (let key in POSSIBLE) {
         const moveAttackOrSupport = POSSIBLE[key]
-        // console.log( key + " : " + moveAttackOrSupport )
         if (piece.color === BLACK) {
             cells[key].addToBlackInfluence();
         } else if (piece.color === WHITE) {
