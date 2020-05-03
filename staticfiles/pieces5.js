@@ -54,6 +54,10 @@ class Cell {
     }
     setPieceOnThisCell(pieceId) {
         this.whoIsOnThisCell = pieceId
+        //pieces[pieceId].setCell(this.id)
+//        pieces["" + pieceId].setCell("hello")
+//pieces[0].setCell(pieceId)
+//        console.log(" pieceId is " + pieceId)
         if ( DEBUG === true ) {
             this.showDebugInfo();
         }
@@ -109,7 +113,6 @@ d3.select("#" + this.id).attr('fill', this.mainClr)
         d3.select("#WHO" + this.id).text(this.whoIsOnThisCell);
 
     }
-
 
     addToBlackInfluence() {
         this.blackInfluence++;
@@ -311,6 +314,8 @@ class Piece {
     this.unicode = unicode;
     this.col = col;
     this.row = row;
+    this.homeRow = row;
+
     this.loop = loop;
     this.attack = attack;
     this.movement = movement;
@@ -318,6 +323,11 @@ class Piece {
     this.sx = 0 // starting x - used to placement 
     this.sy = 0 // starting x - used to placement 
   }
+
+  setCell(cellId ) {
+    console.log("landed on cell " + cellId )
+  }
+
   getIdOfTheCellThatThisIsOn() { 
     return "id" + this.col + "_" + this.row;
   }
@@ -352,39 +362,57 @@ class Piece {
     return possible
   }
 }
+class Rook extends Piece {}
+class Knight extends Piece {}
+class Bishop extends Piece{}
+class King extends Piece{}
+class Queen extends Piece{}
+class Pawn extends Piece{
 
+  constructor (id, color, type, size, unicode, col, row, loop, attack, movement ) {
+    super(id, color, type, size, unicode, col, row, loop, attack, movement ) 
+        // rows are 'zero' bases, so 4 = 5 and 3 = 4 
+        this.enpassentRow = this.homeRow === 1 ? 4 : 3
+  }
+  get_possible_moves() {
+    const possible = super.get_possible_moves()
+    console.log("Pawns homerow " + this.homeRow + " current row " + this.row + " enpassentRow " + this.enpassentRow)
+    return possible 
+  }
+}
 const pieces = {
-  1: new Piece(1,BLACK, ROOK, 50,'\u265C', 0,0, 7,rook_attack, rook_attack),
-  2: new Piece(2,BLACK, KNIGHT, 50,'\u265E', 1,0, 1, knight_attack, knight_attack),
-  3: new Piece(3,BLACK, BISHOP, 50,'\u265D', 2,0,7, bishop_attack, bishop_attack ),
-  4: new Piece(4,BLACK, KING, 50,'\u265A', 4,0 ,1,  royal_attack, royal_attack),
-  5: new Piece(5,BLACK, QUEEN, 50,'\u265B', 3,0 , 7, royal_attack, royal_attack),
-  6: new Piece(6,BLACK, BISHOP, 50,'\u265D', 5,0, 7,bishop_attack, bishop_attack ),
-  7: new Piece(7,BLACK, KNIGHT, 50,'\u265E', 6,0 ,1,  knight_attack, knight_attack),
-  8: new Piece(8,BLACK, ROOK, 50,'\u265C', 7,0 , 7, rook_attack, rook_attack),
+  1: new Rook(1,BLACK, ROOK, 50,'\u265C', 0,0, 7,rook_attack, rook_attack),
+  2: new Knight(2,BLACK, KNIGHT, 50,'\u265E', 1,0, 1, knight_attack, knight_attack),
+  3: new Bishop(3,BLACK, BISHOP, 50,'\u265D', 2,0,7, bishop_attack, bishop_attack ),
+  4: new King(4,BLACK, KING, 50,'\u265A', 4,0 ,1,  royal_attack, royal_attack),
+  5: new Queen(5,BLACK, QUEEN, 50,'\u265B', 3,0 , 7, royal_attack, royal_attack),
+  6: new Bishop(6,BLACK, BISHOP, 50,'\u265D', 5,0, 7,bishop_attack, bishop_attack ),
+  7: new Knight(7,BLACK, KNIGHT, 50,'\u265E', 6,0 ,1,  knight_attack, knight_attack),
+  8: new Rook(8,BLACK, ROOK, 50,'\u265C', 7,0 , 7, rook_attack, rook_attack),
+
   9: new Piece(9,BLACK, PAWN, 50,'\u265F', 0,1 , 2, bishop_attack, pawn_black_move),
-  10: new Piece(10,BLACK, PAWN, 50,'\u265F', 1,1 , 2, bishop_attack, pawn_black_move),
-  11: new Piece(11,BLACK, PAWN, 50,'\u265F', 2,1 , 2, bishop_attack, pawn_black_move),
-  12: new Piece(12,BLACK, PAWN, 50,'\u265F', 3,1 , 2, bishop_attack, pawn_black_move),
-  13: new Piece(13,BLACK, PAWN, 50,'\u265F', 4,1 , 2, bishop_attack, pawn_black_move),
-  14: new Piece(14,BLACK, PAWN, 50,'\u265F', 5,1, 2, bishop_attack, pawn_black_move ),
-  15: new Piece(15,BLACK, PAWN, 50,'\u265F', 6,1 ,2,  bishop_attack, pawn_black_move),
-  16: new Piece(16,BLACK, PAWN, 50,'\u265F', 7,1 ,2,  bishop_attack, pawn_black_move),
+  10: new Pawn(10,BLACK, PAWN, 50,'\u265F', 1,1 , 2, bishop_attack, pawn_black_move),
+  11: new Pawn(11,BLACK, PAWN, 50,'\u265F', 2,1 , 2, bishop_attack, pawn_black_move),
+  12: new Pawn(12,BLACK, PAWN, 50,'\u265F', 3,1 , 2, bishop_attack, pawn_black_move),
+  13: new Pawn(13,BLACK, PAWN, 50,'\u265F', 4,1 , 2, bishop_attack, pawn_black_move),
+  14: new Pawn(14,BLACK, PAWN, 50,'\u265F', 5,1, 2, bishop_attack, pawn_black_move ),
+  15: new Pawn(15,BLACK, PAWN, 50,'\u265F', 6,1 ,2,  bishop_attack, pawn_black_move),
+  16: new Pawn(16,BLACK, PAWN, 50,'\u265F', 7,1 ,2,  bishop_attack, pawn_black_move),
   //
-  17: new Piece(17,WHITE, ROOK, 50,'\u2656', 0,7 ,7,  rook_attack, rook_attack),
-  18: new Piece(18,WHITE, KNIGHT, 50,'\u2658', 1,7 , 1, knight_attack, knight_attack),
-  19: new Piece(19,WHITE, BISHOP, 50,'\u2657', 2,7, 7, bishop_attack, bishop_attack),
-  20: new Piece(20,WHITE, KING, 50,'\u2654', 4,7, 1, royal_attack, royal_attack),
-  21: new Piece(21,WHITE, QUEEN, 50,'\u2655', 3,7, 7, royal_attack, royal_attack),
-  22: new Piece(22,WHITE, BISHOP, 50,'\u2657', 5,7, 7, bishop_attack, bishop_attack),
-  23: new Piece(23,WHITE, KNIGHT, 50,'\u2658', 6,7 ,1,  knight_attack, knight_attack),
-  24: new Piece(24,WHITE, ROOK, 50,'\u2656', 7,7 , 7, rook_attack, rook_attack),
-  25: new Piece(25,WHITE, PAWN, 50,'\u2659', 0,6 ,2,  bishop_attack, pawn_white_move),
-  26: new Piece(26,WHITE, PAWN, 50,'\u2659', 1,6 ,2,  bishop_attack, pawn_white_move),
-  27: new Piece(27,WHITE, PAWN, 50,'\u2659', 2,6 , 2, bishop_attack, pawn_white_move),
-  28: new Piece(28,WHITE, PAWN, 50,'\u2659', 3,6 , 2, bishop_attack, pawn_white_move),
-  29: new Piece(29,WHITE, PAWN, 50,'\u2659', 4,6 , 2, bishop_attack, pawn_white_move),
-  30: new Piece(30,WHITE, PAWN, 50,'\u2659', 5,6 , 2, bishop_attack, pawn_white_move),
-  31: new Piece(31,WHITE, PAWN, 50,'\u2659', 6,6 ,2,  bishop_attack, pawn_white_move),
-  32: new Piece(32,WHITE, PAWN, 50,'\u2659', 7,6,2 ,  bishop_attack, pawn_white_move )
+  17: new Rook(17,WHITE, ROOK, 50,'\u2656', 0,7 ,7,  rook_attack, rook_attack),
+  18: new Knight(18,WHITE, KNIGHT, 50,'\u2658', 1,7 , 1, knight_attack, knight_attack),
+  19: new Bishop(19,WHITE, BISHOP, 50,'\u2657', 2,7, 7, bishop_attack, bishop_attack),
+  20: new King(20,WHITE, KING, 50,'\u2654', 4,7, 1, royal_attack, royal_attack),
+  21: new Queen(21,WHITE, QUEEN, 50,'\u2655', 3,7, 7, royal_attack, royal_attack),
+  22: new Bishop(22,WHITE, BISHOP, 50,'\u2657', 5,7, 7, bishop_attack, bishop_attack),
+  23: new Knight(23,WHITE, KNIGHT, 50,'\u2658', 6,7 ,1,  knight_attack, knight_attack),
+  24: new Rook(24,WHITE, ROOK, 50,'\u2656', 7,7 , 7, rook_attack, rook_attack),
+  25: new Pawn(25,WHITE, PAWN, 50,'\u2659', 0,6 ,2,  bishop_attack, pawn_white_move),
+  26: new Pawn(26,WHITE, PAWN, 50,'\u2659', 1,6 ,2,  bishop_attack, pawn_white_move),
+  27: new Pawn(27,WHITE, PAWN, 50,'\u2659', 2,6 , 2, bishop_attack, pawn_white_move),
+  28: new Pawn(28,WHITE, PAWN, 50,'\u2659', 3,6 , 2, bishop_attack, pawn_white_move),
+  29: new Pawn(29,WHITE, PAWN, 50,'\u2659', 4,6 , 2, bishop_attack, pawn_white_move),
+  30: new Pawn(30,WHITE, PAWN, 50,'\u2659', 5,6 , 2, bishop_attack, pawn_white_move),
+  31: new Pawn(31,WHITE, PAWN, 50,'\u2659', 6,6 ,2,  bishop_attack, pawn_white_move),
+  32: new Pawn(32,WHITE, PAWN, 50,'\u2659', 7,6,2 ,  bishop_attack, pawn_white_move )
 }
