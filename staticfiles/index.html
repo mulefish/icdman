@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <style>
     #chessboard {}
+    #moveCount {
+        font-size: 30px;
+    }
 </style>
 </head>
 <body>
@@ -12,6 +15,7 @@
       <tr>
         <td><div id='viewport'></div></td>
         <td valign='top'>
+            <div id='moveCount'>0</div>
             <div id='deadPieces'>
 
             </div>
@@ -21,28 +25,33 @@
     <hr/>
     <div id='out'></div>
     <hr/>
-    <script>
+    <script>        
+    let moveCount = 0; 
+
+        function bumpMoveCount() { 
+            moveCount++; 
+            document.getElementById("moveCount").innerHTML = moveCount           
+        }
     </script>
+
     <div id='controls'>
         <button onclick='toggleDebugState()'>toggleDebugState()</button>
         <button onclick='toggleShowInfluence()'>toggleShowInfluence()</button>
         <button onclick='toggleEnforceRules()'>toggleEnforceRules()</button>
     </div>
     <script> 
-    // 704 is cleanly divisible by 8...  8 rows and 8 columns... not too small and not too big
-    const width = 704;
-    const height = 704;
-    const size = width / 8 // Maybe ought to be called 'radius' 
-    document.getElementById("viewport").innerHTML = `<svg id='chessboard' width="${width}" height="${height}"></svg>`
-    const svg = d3.select("svg");
+        // 704 is cleanly divisible by 8...  8 rows and 8 columns... not too small and not too big
+        const width = 704;
+        const height = 704;
+        const size = width / 8 // Maybe ought to be called 'radius' 
+        document.getElementById("viewport").innerHTML = `<svg id='chessboard' width="${width}" height="${height}"></svg>`
+        const svg = d3.select("svg");
     </script>
-
-
     <script src="pieces5.js"></script>
     <script src="logic5.js"></script>
     <script>
-    makeCells()
     // Make the board ( needs to go first because the pieces get the actual XY from these cells )
+    makeCells()
     for ( let key in cells ) {
         const cell = cells[key]
         addCellIntoDom(cell)
@@ -54,18 +63,11 @@
         const cellId = "id" + piece.col + "_" + piece.row
         cells[cellId].setPieceOnThisCell(piece.id)
     }
-
- 
-/*
-    function myFunction() {
-  var table = document.getElementById("myTable");
-  var row = table.insertRow(0);
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  cell1.innerHTML = "NEW CELL1";
-  cell2.innerHTML = "NEW CELL2";
-}
-*/
+    // Set the move count to 0. The boardset up on line 64 here calls 'setPieceOnThisCell()' which adds erronious info...  so reset it here
+    moveCount = 0
+    document.getElementById("moveCount").innerHTML = 0
     </script>
+
+
 </body>
 

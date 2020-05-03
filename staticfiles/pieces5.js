@@ -53,11 +53,17 @@ class Cell {
         return this.whoIsOnThisCell
     }
     setPieceOnThisCell(pieceId) {
-        this.whoIsOnThisCell = pieceId
-        //pieces[pieceId].setCell(this.id)
-//        pieces["" + pieceId].setCell("hello")
-//pieces[0].setCell(pieceId)
-//        console.log(" pieceId is " + pieceId)
+        const id = parseInt(pieceId)
+        if ( isNaN(id) === true ) {
+          // i.e., make this cell be empty
+          this.whoIsOnThisCell = NONE 
+        } else {
+          // i.e., fill this cell with a piece 
+          // console.log("setPieceOnThisCell: |" + parseInt(id)  + "|")
+          this.whoIsOnThisCell = id        
+          pieces[id].addToMoveCount()
+          bumpMoveCount();
+        }
         if ( DEBUG === true ) {
             this.showDebugInfo();
         }
@@ -322,8 +328,12 @@ class Piece {
     this.hasNeverMoved = true;
     this.sx = 0 // starting x - used to placement 
     this.sy = 0 // starting x - used to placement 
+    this.moveCount = 0 
   }
 
+  addToMoveCount() { 
+    this.moveCount++;
+  }
   setCell(cellId ) {
     console.log("landed on cell " + cellId )
   }
@@ -376,7 +386,8 @@ class Pawn extends Piece{
   }
   get_possible_moves() {
     const possible = super.get_possible_moves()
-    console.log("Pawns homerow " + this.homeRow + " current row " + this.row + " enpassentRow " + this.enpassentRow)
+console.log(" mc " + this.moveCount )
+//    console.log("Pawns homerow " + this.homeRow + " current row " + this.row + " enpassentRow " + this.enpassentRow)
     return possible 
   }
 }
